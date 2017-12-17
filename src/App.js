@@ -1,8 +1,10 @@
 import React from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter, Route, browserHistory, Switch } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
+import Home from './Home'
 import ListBooks from './ListBooks'
 import SearchBooks from './SearchBooks'
+import NotFound from './NotFound'
 import './App.css'
 
 class BooksApp extends React.Component {
@@ -34,24 +36,27 @@ class BooksApp extends React.Component {
 
   render() {
     return (
-      <Router>
+      <BrowserRouter history={browserHistory}>
         <div className="app">
-          <Route exact path="/search" render={() => (
-              <SearchBooks
-                books={this.state.books}
-                onChangeShelf={this.onChangeShelf}
-              />
-            )}
-          />
-          <Route exact path="/" render={() => (
-              <ListBooks
-                books={this.state.books}
-                onChangeShelf={this.onChangeShelf}
-              />
-            )}
-          />
+          <Switch>
+            <Route exact path="/" render={() => (
+                <Home
+                  books={this.state.books}
+                  onChangeShelf={this.onChangeShelf}
+                />
+              )}
+            />
+            <Route exact path="/search" render={() => (
+                <SearchBooks
+                  books={this.state.books}
+                  onChangeShelf={this.onChangeShelf}
+                />
+              )}
+            />
+            <Route path="*" component={NotFound} />
+          </Switch>
         </div>
-      </Router>
+      </BrowserRouter>
     )
   }
 }
