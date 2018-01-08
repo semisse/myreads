@@ -2,7 +2,6 @@ import React from 'react'
 import { BrowserRouter, Route, browserHistory, Switch } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import Home from './Home'
-import ListBooks from './ListBooks'
 import SearchBooks from './SearchBooks'
 import NotFound from './NotFound'
 import './App.css'
@@ -20,15 +19,17 @@ class BooksApp extends React.Component {
   }
 
   onChangeShelf = (book, shelf) => {
+
+
     //Check to see if the state book shelf is different from the new shelf chosen
-    if(book.shelf !== shelf){
+    if(book.shelf !== shelf || !book.shelf){
       //Update the new shelf on API
       BooksAPI.update(book, shelf).then(() => {
         book.shelf = shelf
         //Add the new book state shelf to the state
         let previousBooks = this.state.books.filter((b) => b.id !== book.id)
         this.setState((currentState) => {
-          books: previousBooks.concat(book)
+          return { books: previousBooks.concat(book) }
         })
       })
     }
